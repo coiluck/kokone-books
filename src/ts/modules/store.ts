@@ -3,10 +3,18 @@ import { Store } from '@tauri-apps/plugin-store';
 
 interface SettingsState {
   activeTab: string;
+  accentColor: string;
+  textColor: string;
+  bgColor: string;
+  bgMildLevel: number;
 }
 
 const initialSettingsState: SettingsState = {
-  activeTab: 'home',
+  activeTab: 'add',
+  accentColor: '#ff7f7e',
+  textColor: '#fff3f1',
+  bgColor: '#0a0f1e',
+  bgMildLevel: 0.05,
 };
 
 export const settingsState = structuredClone(initialSettingsState);

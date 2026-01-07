@@ -8,7 +8,7 @@ const tabs = document.querySelectorAll(".tab-item");
 tabs.forEach(tab => {
   tab.addEventListener("click", () => {
     checkActiveTab(tab);
-    changeModal((tab as HTMLElement).dataset.modal as string, null, 300, false);
+    changeModal((tab as HTMLElement).dataset.modal as string, null, 300, true);
   });
 });
 
@@ -20,5 +20,5 @@ function checkActiveTab(tab: Element) {
 const initialTab = document.querySelector(`.tab-item.${userActiveTab}`);
 if (initialTab) {
   checkActiveTab(initialTab);
-  changeModal(userActiveTab as string, null, 300, false);
+  changeModal(userActiveTab as string, null, 300, true);
 }

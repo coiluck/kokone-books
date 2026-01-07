@@ -68,7 +68,7 @@ body {
 }
 
 .tab-item .tab-item-text {
-  font-size: 1rem;
+  font-size: .9rem;
   color: var(--text);
   text-wrap: nowrap;
   text-align: center;

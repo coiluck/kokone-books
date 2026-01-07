@@ -4,13 +4,14 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  color: var(--text-color);
   font-weight: normal;
+  color: var(--text);
 }
 html {
   font-size: clamp(14px, 3vw, 18px);
 }
 body {
+  color: var(--text);
   font-family: var(--font);
   min-height: 100vh;
   line-height: 1.6;
@@ -34,6 +35,7 @@ button, select {
 
 .modal {
   display: none;
+  flex-direction: column;
   position: absolute;
   inset: 0;
   padding: 20px 15%;
@@ -81,6 +83,28 @@ button, select {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(3px);
   z-index: 99;
+}
+
+.modal-title {
+  font-size: 1.2rem;
+  padding: 3px 0px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--accent);
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.modal-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 20px;
+}
+.modal-content-subtitle {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .fade-in {

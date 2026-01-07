@@ -1,0 +1,59 @@
+#modal-add input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--bg-hover);
+  border-radius: 5px;
+  background: var(--bg-mild);
+  outline: none;
+}
+
+
+#add-book-tags-suggestions {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  width: 100%;
+  margin-top: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.add-book-tag-suggestion {
+  position: relative;
+  padding: 4px 8px;
+  background: none;
+  border: 1px solid var(--bg-hover);
+  border-radius: 5px;
+}
+.add-book-tag-suggestion::before {
+  content: '#';
+  color: var(--accent);
+}
+.add-book-tag-suggestion.active {
+  background: rgb(from var(--accent) r g b / 0.2);
+  border-color: var(--accent);
+}
+
+
+.add-button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.add-button-container button {
+  width: 50%;
+  max-width: 200px;
+  padding: 10px 12px;
+  border: 1px solid var(--bg-hover);
+  border-radius: 5px;
+  outline: none;
+}
+#add-book-cancel {
+  background: var(--bg-mild);
+}
+#add-book-submit {
+  background: var(--accent);
+}
