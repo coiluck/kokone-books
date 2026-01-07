@@ -3,6 +3,7 @@ import { Store } from '@tauri-apps/plugin-store';
 
 interface SettingsState {
   activeTab: string;
+  font: string;
   accentColor: string;
   textColor: string;
   bgColor: string;
@@ -11,10 +12,11 @@ interface SettingsState {
 
 const initialSettingsState: SettingsState = {
   activeTab: 'add',
+  font: 'mamelon',
   accentColor: '#ff7f7e',
   textColor: '#fff3f1',
   bgColor: '#0a0f1e',
-  bgMildLevel: 0.05,
+  bgMildLevel: 8,
 };
 
 export const settingsState = structuredClone(initialSettingsState);
@@ -40,4 +42,12 @@ export async function saveSettingsData() {
   const store = await getSettingsStore();
   await store.set('settings', settingsState);
   await store.save();
+}
+
+export async function applyStore() {
+  const settingsStore = await getSettingsStore();
+  const settings = await settingsStore.get<SettingsState>('settings');
+  if (settings) {
+    Object.assign(settingsState, settings);
+  }
 }
