@@ -40,6 +40,12 @@ button, select {
   inset: 0;
   padding: 20px 15%;
   background-color: var(--bg);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 @media (max-width: 768px) {
   .modal {

@@ -1,0 +1,147 @@
+#modal-settings .modal-content {
+  gap: 0;
+}
+.app-dev-info {
+  font-size: .7rem;
+  text-align: center;
+  margin-top: 20px;
+}
+#setting-reset {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 5px 10px;
+  font-size: .8rem;
+  color: var(--accent);
+  background: none;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+#setting-reset:hover {
+  background: var(--accent);
+  color: var(--text);
+}
+
+/* color picker */
+input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+}
+/* select */
+select.setting-select {
+  background: var(--bg-hover);
+  border: none;
+  padding: 4px 8px;
+  font-family: var(--font);
+  border-radius: 5px;
+  outline: none;
+}
+select.setting-select option {
+  background-color: var(--bg-mild);
+  color: var(--text);
+  font-family: var(--font);
+  text-align: center;
+}
+/* range control */
+.setting-range-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  max-width: 150px;
+}
+.setting-range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-hover);
+  outline: none;
+  cursor: pointer;
+}
+.setting-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.setting-range-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.setting-range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+.setting-range-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+.setting-range-value {
+  font-size: .7rem;
+  opacity: .6;
+  text-align: right;
+}
+
+
+
+
+
+.settings-subtitle {
+  margin: 20px 0 5px 0;
+  font-size: .9rem;
+  color: var(--accent);
+}
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--bg-mild);
+  padding: 10px;
+  border-radius: 10px;
+}
+.setting-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.setting-label {
+  font-size: .9rem;
+}
+
+
+.setting-color {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.setting-color-value {
+  font-size: .7rem;
+  opacity: .6;
+}

@@ -5,18 +5,27 @@
     <link rel="stylesheet" href="/src/css/base.css" />
     <link rel="stylesheet" href="/src/css/tabs.css" />
     <link rel="stylesheet" href="/src/css/add.css" />
+    <link rel="stylesheet" href="/src/css/settings.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>kokone-books</title>
     <style>
+      @font-face {
+        font-family: 'mamelon';
+        src: url('./src/assets/fonts/Mamelon-3.5HiRegular.woff2') format('woff2');
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'rounded-mplus';
+        src: url('./src/assets/fonts/rounded-mplus-1c-regular.ttf') format('ttf');
+        font-display: swap;
+      }
       :root {
-        --font: 'Noto Sans JP', sans-serif;
+        --font: 'mamelon';
         --accent: #ff7f7e;
         --text: #fff3f1;
         --bg: #0a0f1e;
         --bg-mild: #21283d; /* これはこっちで決定 */
         --bg-hover: rgba(255, 255, 255, 0.1); /* これはこっちで決定 */
-        --radius-big: 20px;
-        --radius-small: 10px;
       }
     </style>
   </head>
@@ -47,12 +56,12 @@
         <div class="modal-content">
           <div class="modal-content-section">
             <div class="modal-content-subtitle">書籍を登録</div>
-            <input type="text" id="add-book-title" placeholder="書籍名 / URL" spellcheck="false">
+            <input type="text" id="add-book-title" placeholder="書籍名 / URL" spellcheck="false" autocomplete="off">
           </div>
           <div class="modal-content-section">
             <div class="modal-content-subtitle">Tags</div>
             <div class="add-book-tags-input-container" id="add-book-tags-input-container">
-              <input type="text" class="add-book-tags" placeholder="タグを入力 & Enterキーで追加" />
+              <input type="text" class="add-book-tags" placeholder="タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
             </div>
             <div id="add-book-tags-suggestions">
               <div class="add-book-tag-suggestion">Tag1</div>
@@ -60,6 +69,11 @@
               <div class="add-book-tag-suggestion">Tag3</div>
               <div class="add-book-tag-suggestion">Tag4</div>
               <div class="add-book-tag-suggestion">Tag5</div>
+              <div class="add-book-tag-suggestion">Tag6</div>
+              <div class="add-book-tag-suggestion">Tag7</div>
+              <div class="add-book-tag-suggestion">Tag8</div>
+              <div class="add-book-tag-suggestion">Tag9</div>
+              <div class="add-book-tag-suggestion">Tag10</div>
             </div>
           </div>
           <div style="flex: 1;"></div>
@@ -72,10 +86,64 @@
 
       <div id="modal-settings" class="modal">
         <div class="modal-title">Settings</div>
+        <div class="modal-content">
+          <div class="settings-subtitle">外観</div>
+          <section class="settings-section">
+            <div class="setting-item">
+              <span class="setting-label">フォント</span>
+              <select class="setting-select" id="setting-font-select">
+                <option value="mamelon">マメロン</option>
+                <option value="serif">OS Default Serif</option>
+                <option value="rounded-mplus">Rounded M+</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <span class="setting-label">アクセントカラー</span>
+              <div id="setting-color-accent" class="setting-color">
+                <span class="setting-color-value">#ff7f7e</span>
+                <input type="color" name="accent" value="#ff7f7e">
+              </div>
+            </div>
+            <div class="setting-item">
+              <span class="setting-label">テキストカラー</span>
+              <div id="setting-color-text" class="setting-color">
+                <span class="setting-color-value">#fff3f1</span>
+                <input type="color" name="text" value="#fff3f1">
+              </div>
+            </div>
+            <div class="setting-item">
+              <span class="setting-label">背景カラー</span>
+              <div id="setting-color-bg" class="setting-color">
+                <span class="setting-color-value">#0a0f1e</span>
+                <input type="color" name="bg" value="#0a0f1e">
+              </div>
+            </div>
+            <div class="setting-item">
+              <span class="setting-label">背景の明度差</span>
+              <div class="setting-range-container">
+                <input type="range" class="setting-range-slider" name="bg-mild-level" value="8" min="4" max="12" step="1">
+                <span class="setting-range-value" id="setting-bg-mild-value">8</span>
+              </div>
+            </div>
+            <button id="setting-reset">デフォルトに戻す</button>
+          </section>
+          <div class="settings-subtitle">アプリ</div>
+          <section class="settings-section">
+            <div class="settings-section-item">
+            </div>
+          </section>
+          <div class="settings-subtitle">Add</div>
+          <section class="settings-section">
+            <div class="settings-section-item">
+            </div>
+          </section>
+          <p class="app-dev-info">Developed by KOKONE Project</p>
+        </div>
       </div>
     </main>
 
     <script type="module" src="/src/ts/main.ts"></script>
     <script type="module" src="/src/ts/tabs.ts"></script>
+    <script type="module" src="/src/ts/settings.ts"></script>
   </body>
 </html>
