@@ -1,0 +1,109 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  font-weight: normal;
+}
+html {
+  font-size: clamp(14px, 3vw, 18px);
+}
+body {
+  font-family: var(--font);
+  min-height: 100vh;
+  line-height: 1.6;
+  background-color: var(--bg);
+  overflow: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+ul {
+  list-style: none;
+}
+button, select {
+  cursor: pointer;
+}
+
+.modal {
+  display: none;
+  position: absolute;
+  inset: 0;
+  padding: 20px 15%;
+  background-color: var(--bg);
+}
+@media (max-width: 768px) {
+  .modal {
+    padding: 20px 10%;
+  }
+}
+@media (max-width: 480px) {
+  .modal {
+    padding: 20px 5%;
+  }
+}
+
+.sub-modal {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  height: 75%;
+  background-color: var(--bg-bright);
+  border-radius: 20px;
+  z-index: 100;
+}
+@media (max-width: 768px) {
+  .sub-modal {
+    width: 80%;
+    height: 80%;
+  }
+}
+@media (max-width: 480px) {
+  .sub-modal {
+    width: 85%;
+    height: 85%;
+  }
+}
+
+#sub-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: 99;
+}
+
+.fade-in {
+  animation: FadeIn .3s;
+  animation-fill-mode: both;
+}
+@keyframes FadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.fade-out {
+  animation: FadeOut .3s;
+  animation-fill-mode: both;
+}
+@keyframes FadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

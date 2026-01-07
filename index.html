@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/src/css/base.css" />
+    <link rel="stylesheet" href="/src/css/tabs.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>kokone-books</title>
+    <style>
+      :root {
+        --font: 'Noto Sans JP', sans-serif;
+        --accent: #ff7f7e;
+        --text: #fff3f1;
+        --bg: #0a0f1e;
+        --bg-mild: #1a1f2e; /* これはこっちで決定 */
+        --bg-hover: rgba(255, 255, 255, 0.1); /* これはこっちで決定 */
+        --radius-big: 20px;
+        --radius-small: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="tabs-container">
+      <div class="tab-item home" data-modal="home">
+        <span class="tab-item-icon"></span>
+        <span class="tab-item-text">Home</span>
+      </div>
+      <div class="tab-item books" data-modal="books">
+        <span class="tab-item-icon"></span>
+        <span class="tab-item-text">Books</span>
+      </div>
+      <div class="tab-item memos" data-modal="memos">
+        <span class="tab-item-icon"></span>
+        <span class="tab-item-text">Memos</span>
+      </div>
+      <div class="tab-item add" data-modal="add">
+        <span class="tab-item-icon"></span>
+        <span class="tab-item-text">Add</span>
+      </div>
+      <div class="tab-item settings" data-modal="settings">
+        <span class="tab-item-icon"></span>
+        <span class="tab-item-text">Settings</span>
+      </div>
+    </div>
+
+    <main class="main-container">
+      <div id="modal-home" class="modal">home modal</div>
+      <div id="modal-books" class="modal">books modal</div>
+      <div id="modal-memos" class="modal">memos modal</div>
+      <div id="modal-add" class="modal">add modal</div>
+      <div id="modal-settings" class="modal">settings modal</div>
+    </main>
+
+    <script type="module" src="/src/ts/main.ts"></script>
+    <script type="module" src="/src/ts/tabs.ts"></script>
+  </body>
+</html>

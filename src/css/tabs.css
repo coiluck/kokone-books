@@ -1,0 +1,130 @@
+
+body {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "tabs-container main-container";
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg);
+}
+
+@media (max-width: 480px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 50px;
+    grid-template-areas:
+      "main-container"
+      "tabs-container";
+  }
+}
+.tabs-container {
+  display: grid;
+  grid-area: "tabs-container";
+  grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
+  grid-auto-flow: column;
+  gap: 0;
+  background-color: var(--bg-mild);
+  border-right: 1px solid var(--bg-hover);
+  border-bottom: none;
+  z-index: 1000;
+}
+@media (max-width: 480px) {
+  .tabs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    grid-auto-flow: row;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(25px + 10px + .8rem);
+    overflow: hidden;
+    border-right: none;
+    border-top: 1px solid var(--bg-hover);
+  }
+}
+
+.main-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  grid-area: "main-container";
+  overflow: hidden;
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  cursor: pointer;
+  overflow: visible;
+  transition: all 0.3s ease;
+}
+.tab-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.tab-item .tab-item-text {
+  font-size: 1rem;
+  color: var(--text);
+  text-wrap: nowrap;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+  overflow: visible;
+  transition: all 0.3s ease;
+}
+.tab-item .tab-item-icon {
+  width: 25px;
+  height: 25px;
+  /* mask-imageは個別に */
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: var(--text);
+  transition: all 0.3s ease;
+}
+.tab-item.active .tab-item-text {
+  color: var(--accent);
+}
+.tab-item.active .tab-item-icon {
+  background-color: var(--accent);
+}
+
+.tab-item.home .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/house_line.svg');
+}
+.tab-item.home.active .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/house_fill.svg');
+}
+
+.tab-item.books .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/book_line.svg');
+}
+.tab-item.books.active .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/book_fill.svg');
+}
+
+.tab-item.memos .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/memo_line.svg');
+}
+.tab-item.memos.active .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/memo_fill.svg');
+}
+
+.tab-item.add .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/add_line.svg');
+}
+.tab-item.add.active .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/add_fill.svg');
+}
+
+.tab-item.settings .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/settings_line.svg');
+}
+.tab-item.settings.active .tab-item-icon {
+  mask-image: url('/src/assets/images/svg/settings_fill.svg');
+}
