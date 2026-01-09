@@ -3,6 +3,7 @@ import { settingsState, saveSettingsData } from "./modules/store";
 
 export function setUpSettings() {
   setUpAppearanceSettings();
+  setUpAppSettings();
 }
 
 import { updateColor } from "./modules/color";
@@ -67,4 +68,16 @@ function setUpAppearanceSettings() {
     inputs.bgMild.value = `${String(DEFAULT_VALUE.bgMildLevel)}%`;
     updateColor();
   });
+}
+
+function setUpAppSettings() {
+  const firstTabSelect = document.getElementById('setting-first-tab-select') as HTMLSelectElement;
+  if (firstTabSelect) {
+    firstTabSelect.value = settingsState.activeTab || 'add';
+    firstTabSelect.addEventListener('change', (e) => {
+      const selectedTab = (e.target as HTMLSelectElement).value;
+      settingsState.activeTab = selectedTab;
+      saveSettingsData();
+    });
+  }
 }

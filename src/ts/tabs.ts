@@ -2,8 +2,6 @@
 import { settingsState } from "./modules/store";
 import { changeModal } from "./modules/changeModal";
 
-const userActiveTab: string = settingsState.activeTab || "home";
-
 const tabs = document.querySelectorAll(".tab-item");
 tabs.forEach(tab => {
   tab.addEventListener("click", () => {
@@ -17,8 +15,11 @@ function checkActiveTab(tab: Element) {
   tab.classList.add("active");
 }
 
-const initialTab = document.querySelector(`.tab-item.${userActiveTab}`);
-if (initialTab) {
-  checkActiveTab(initialTab);
-  changeModal(userActiveTab as string, null, 300, true);
+export function setupTabs() {
+  const userActiveTab: string = settingsState.activeTab || "add";
+  const initialTab = document.querySelector(`.tab-item.${userActiveTab}`);
+  if (initialTab) {
+    checkActiveTab(initialTab);
+    changeModal(userActiveTab as string, null, 300, true);
+  }
 }
