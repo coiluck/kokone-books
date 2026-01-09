@@ -20,7 +20,10 @@
 }
 #setting-reset:hover {
   background: var(--accent);
-  color: var(--text);
+  color: var(--bg);
+}
+#setting-app-version {
+  font-size: .9rem;
 }
 
 /* color picker */

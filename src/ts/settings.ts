@@ -4,6 +4,7 @@ import { settingsState, saveSettingsData } from "./modules/store";
 export function setUpSettings() {
   setUpAppearanceSettings();
   setUpAppSettings();
+  setUpOtherSettings();
 }
 
 import { updateColor } from "./modules/color";
@@ -80,4 +81,16 @@ function setUpAppSettings() {
       saveSettingsData();
     });
   }
+}
+
+import packageJson from '../../package.json';
+
+function setUpOtherSettings() {
+  // app version
+  const appVersion = document.getElementById('setting-app-version') as HTMLElement;
+  if (appVersion) {
+    appVersion.textContent = packageJson.version;
+  }
+  // export
+  // import
 }
