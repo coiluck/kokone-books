@@ -140,7 +140,27 @@
           </section>
           <div class="settings-subtitle">Add</div>
           <section class="settings-section">
-            <div class="settings-section-item">
+            <div class="setting-item">
+              <span class="setting-label">自動入力</span>
+              <select class="setting-select" id="setting-auto-input">
+                <option value="on">Auto</option>
+                <option value="off">Focus</option>
+                <option value="settings">Off</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <span class="setting-label">自動入力はURLのみ</span>
+              <label class="switch">
+                <input type="checkbox" id="setting-auto-input-only-url">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <span class="setting-label">プリセットタグ</span>
+              <input type="text" id="setting-preset-tags" placeholder="タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
+            </div>
+            <div class="setting-tags-container">
+              <div class="setting-tag-item">Tag1</div>
             </div>
           </section>
           <div class="settings-subtitle">その他</div>
