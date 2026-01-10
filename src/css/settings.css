@@ -199,7 +199,7 @@ select.setting-select option {
   opacity: .6;
 }
 
-input[type="text"] {
+.setting-item input[type="text"] {
   width: 100%;
   max-width: clamp(150px, 50vw, 250px);
   background: var(--bg);
@@ -211,13 +211,14 @@ input[type="text"] {
   outline: none;
   transition: all 0.3s ease;
 }
-input[type="text"]:focus {
+.setting-item input[type="text"]:focus {
   border: 1px solid var(--accent);
 }
 
 .setting-tags-container {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 5px;
 }
 .setting-tag-item {
@@ -237,7 +238,5 @@ input[type="text"]:focus {
 .setting-tag-item::after {
   content: '×';
   color: var(--text);
-  font-size: .8rem;
-  padding: 2px 4px;
-  cursor: pointer;
+  padding: 4px;
 }

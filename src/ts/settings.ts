@@ -4,6 +4,7 @@ import { settingsState, saveSettingsData } from "./modules/store";
 export function setUpSettings() {
   setUpAppearanceSettings();
   setUpAppSettings();
+  setUpAddSettings();
   setUpOtherSettings();
 }
 
@@ -74,13 +75,75 @@ function setUpAppearanceSettings() {
 function setUpAppSettings() {
   const firstTabSelect = document.getElementById('setting-first-tab-select') as HTMLSelectElement;
   if (firstTabSelect) {
-    firstTabSelect.value = settingsState.activeTab || 'add';
+    firstTabSelect.value = settingsState.activeTab ?? 'add';
     firstTabSelect.addEventListener('change', (e) => {
       const selectedTab = (e.target as HTMLSelectElement).value;
       settingsState.activeTab = selectedTab;
       saveSettingsData();
     });
   }
+}
+
+function setUpAddSettings() {
+  // auto input
+  const autoInputSelect = document.getElementById('setting-auto-input') as HTMLSelectElement;
+  if (autoInputSelect) {
+    autoInputSelect.value = settingsState.autoInput ?? 'Focus';
+    autoInputSelect.addEventListener('change', (e) => {
+      const selectedAutoInput = (e.target as HTMLSelectElement).value;
+      settingsState.autoInput = selectedAutoInput as 'Tab' | 'Focus' | 'Off';
+      saveSettingsData();
+    });
+  }
+  // auto input only url
+  const autoInputOnlyUrlCheckbox = document.getElementById('setting-auto-input-only-url') as HTMLInputElement;
+  if (autoInputOnlyUrlCheckbox) {
+    autoInputOnlyUrlCheckbox.checked = settingsState.autoInputOnlyUrl ?? true;
+    autoInputOnlyUrlCheckbox.addEventListener('change', (e) => {
+      settingsState.autoInputOnlyUrl = (e.target as HTMLInputElement).checked;
+      saveSettingsData();
+    });
+  }
+  // preset tags
+  const presetTagsInput = document.getElementById('setting-preset-tags') as HTMLInputElement;
+  const presetTagsContainer = document.getElementById('setting-preset-tags-container') as HTMLElement;
+  if (!presetTagsInput || !presetTagsContainer) return
+
+  // 追加
+  const addTag = (newTag: string) => {
+    const newTagItem = document.createElement('div');
+    newTagItem.className = 'setting-tag-item';
+    newTagItem.textContent = newTag;
+    newTagItem.addEventListener('click', () => removePresetTag(newTagItem));
+    presetTagsContainer.appendChild(newTagItem);
+  }
+  // 削除
+  const removePresetTag = (tagItem: HTMLElement) => {
+    settingsState.presetTags = settingsState.presetTags.filter(tag => tag !== tagItem.textContent);
+    saveSettingsData();
+    tagItem.remove();
+  }
+
+  // 初期値の適用
+  for (const tag of settingsState.presetTags) {
+    addTag(tag);
+  }
+
+  // 追加用のイベントリスナ
+  presetTagsInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && presetTagsInput.value.trim() !== '') {
+      const newTag = presetTagsInput.value.trim();
+      presetTagsInput.value = '';
+      if (settingsState.presetTags.includes(newTag)) {
+        // すでに存在する場合
+        // 後で書く
+        return;
+      }
+      settingsState.presetTags.push(newTag);
+      saveSettingsData();
+      addTag(newTag);
+    }
+  });
 }
 
 import packageJson from '../../package.json';
