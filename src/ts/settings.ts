@@ -84,6 +84,8 @@ function setUpAppSettings() {
   }
 }
 
+import { setUpPresetTags } from "./add";
+
 function setUpAddSettings() {
   // auto input
   const autoInputSelect = document.getElementById('setting-auto-input') as HTMLSelectElement;
@@ -114,7 +116,10 @@ function setUpAddSettings() {
     const newTagItem = document.createElement('div');
     newTagItem.className = 'setting-tag-item';
     newTagItem.textContent = newTag;
-    newTagItem.addEventListener('click', () => removePresetTag(newTagItem));
+    newTagItem.addEventListener('click', () => {
+      removePresetTag(newTagItem);
+      setUpPresetTags();
+    });
     presetTagsContainer.appendChild(newTagItem);
   }
   // 削除
@@ -142,6 +147,7 @@ function setUpAddSettings() {
       settingsState.presetTags.push(newTag);
       saveSettingsData();
       addTag(newTag);
+      setUpPresetTags();
     }
   });
 }

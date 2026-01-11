@@ -101,10 +101,10 @@ body {
   mask-image: url('/src/assets/images/svg/house_fill.svg');
 }
 
-.tab-item.books .tab-item-icon {
+.tab-item.library .tab-item-icon {
   mask-image: url('/src/assets/images/svg/book_line.svg');
 }
-.tab-item.books.active .tab-item-icon {
+.tab-item.library.active .tab-item-icon {
   mask-image: url('/src/assets/images/svg/book_fill.svg');
 }
 

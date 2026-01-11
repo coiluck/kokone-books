@@ -8,18 +8,12 @@
 }
 
 
-#add-book-tags-suggestions {
+#add-book-tags-input-suggestions, #add-book-tags-suggestions {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 5px;
-  width: 100%;
-  margin-top: 10px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  transition: all 0.3s ease;
 }
 .add-book-tag-suggestion {
   position: relative;
@@ -28,16 +22,23 @@
   background: none;
   border: 1px solid var(--bg-hover);
   border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 .add-book-tag-suggestion::before {
   content: '#';
   color: var(--accent);
 }
-.add-book-tag-suggestion.active {
+#add-book-tags-input-suggestions .add-book-tag-suggestion, .add-book-tag-suggestion.active {
+  position: relative;
   background: rgb(from var(--accent) r g b / 0.2);
   border-color: var(--accent);
 }
-
+#add-book-tags-input-suggestions .add-book-tag-suggestion::after {
+  content: '×';
+  color: var(--text);
+  padding: 4px;
+}
 
 .add-button-container {
   display: flex;
@@ -57,5 +58,6 @@
   background: var(--bg-mild);
 }
 #add-book-submit {
+  color: var(--bg);
   background: var(--accent);
 }

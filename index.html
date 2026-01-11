@@ -32,13 +32,13 @@
 
   <body>
     <div class="tabs-container">
-      <div class="tab-item books" data-modal="books">
+      <div class="tab-item library" data-modal="library">
         <span class="tab-item-icon"></span>
-        <span class="tab-item-text">Books</span>
+        <span class="tab-item-text">Library</span>
       </div>
       <div class="tab-item add" data-modal="add">
         <span class="tab-item-icon"></span>
-        <span class="tab-item-text">Add</span>
+        <span class="tab-item-text">Add Books</span>
       </div>
       <div class="tab-item settings" data-modal="settings">
         <span class="tab-item-icon"></span>
@@ -47,8 +47,8 @@
     </div>
 
     <main class="main-container">
-      <div id="modal-books" class="modal">
-        <div class="modal-title">Books</div>
+      <div id="modal-library" class="modal">
+        <div class="modal-title">Library</div>
       </div>
 
       <div id="modal-add" class="modal">
@@ -61,19 +61,14 @@
           <div class="modal-content-section">
             <div class="modal-content-subtitle">Tags</div>
             <div class="add-book-tags-input-container" id="add-book-tags-input-container">
-              <input type="text" class="add-book-tags" placeholder="タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
+              <input type="text" class="add-book-tags" id="add-book-tags-input" placeholder="タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
             </div>
+            <div id="add-book-tags-input-suggestions">
+              <!-- atode -->
+            </div>
+            <div class="line"></div>
             <div id="add-book-tags-suggestions">
-              <div class="add-book-tag-suggestion">Tag1</div>
-              <div class="add-book-tag-suggestion active">Tag2</div>
-              <div class="add-book-tag-suggestion">Tag3</div>
-              <div class="add-book-tag-suggestion">Tag4</div>
-              <div class="add-book-tag-suggestion">Tag5</div>
-              <div class="add-book-tag-suggestion">Tag6</div>
-              <div class="add-book-tag-suggestion">Tag7</div>
-              <div class="add-book-tag-suggestion">Tag8</div>
-              <div class="add-book-tag-suggestion">Tag9</div>
-              <div class="add-book-tag-suggestion">Tag10</div>
+              <!-- atode -->
             </div>
           </div>
           <div style="flex: 1;"></div>
@@ -132,13 +127,13 @@
             <div class="setting-item">
               <span class="setting-label">最初のタブ</span>
               <select class="setting-select" id="setting-first-tab-select">
-                <option value="books">Books</option>
-                <option value="add">Add</option>
+                <option value="library">Library</option>
+                <option value="add">Add Books</option>
                 <option value="settings">Settings</option>
               </select>
             </div>
           </section>
-          <div class="settings-subtitle">Add</div>
+          <div class="settings-subtitle">Add Books</div>
           <section class="settings-section">
             <div class="setting-item">
               <span class="setting-label">自動入力</span>
