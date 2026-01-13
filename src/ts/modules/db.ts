@@ -46,7 +46,7 @@ export async function initDB(): Promise<Database> {
     );
     let currentVersion = versionResult.length > 0 ? versionResult[0].version : 0;
 
-    console.log(`Current version: ${currentVersion}`);
+    console.log(`Current DB version: ${currentVersion}`);
     // migrate
     if (currentVersion < CURRENT_SCHEMA_VERSION) {
       console.log(`Migrating DB from v${currentVersion} to v${CURRENT_SCHEMA_VERSION}...`);

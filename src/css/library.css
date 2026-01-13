@@ -1,0 +1,68 @@
+/* book item */
+.library-book-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  width: 100%;
+  border-radius: 5px;
+  user-select: auto;
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  text-decoration: none;
+  color: var(--text);
+}
+.library-book-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  min-width: 0;
+}
+.library-book-item-title {
+  width: 100%;
+  min-width: 0;
+  font-size: .8rem;
+  /* ココだけ後で分離する */
+  text-wrap: nowrap;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.library-book-item-tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.library-book-item-tag {
+  position: relative;
+  padding: 2px 4px;
+  font-size: .7rem;
+  background: rgb(from var(--accent) r g b / 0.2);
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+}
+.library-book-item-tag::before {
+  content: '#';
+  color: var(--accent);
+}
+.library-book-item-metadata {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  font-size: .7rem;
+  opacity: .6;
+}
+.library-book-item-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  background: var(--text);
+  mask-image: url('/src/assets/images/edit.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  cursor: pointer;
+}

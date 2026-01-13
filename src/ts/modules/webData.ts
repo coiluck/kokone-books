@@ -1,7 +1,7 @@
 // webData.ts
 import { invoke } from '@tauri-apps/api/core';
 
-const webData = [
+export const webData = [
   {
     name: "小説家になろう",
     id: "narou",
