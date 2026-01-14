@@ -1,6 +1,6 @@
 // add.ts
 import { v4 as uuid } from 'uuid';
-import { addBook } from "./modules/db";
+import { addBook, BookItem } from "./modules/db";
 import { settingsState } from "./modules/store";
 import { getWebData } from "./modules/webData"
 
@@ -18,20 +18,31 @@ export function setUpAdd() {
     const tagsArray = getTags();
     const inputTitleValue = (document.getElementById('add-book-title') as HTMLInputElement).value.trim();
     const isWeb = URL.canParse(inputTitleValue);
-    const bookDetails = isWeb
-  ? await getWebData(inputTitleValue)
-  : {
-      type: 'physical' as const,
-      title: inputTitleValue,
-      top_url: null,
-      site_type: null
-    };
-    addBook({
-      id: id,
-      ...bookDetails,
-      tags: tagsArray || [],
-      created_at: new Date().toISOString()
-    });
+    let bookDetails: BookItem;
+    if (!isWeb) {
+      bookDetails = {
+        id: id,
+        type: 'physical' as const,
+        title: inputTitleValue,
+        top_url: null,
+        site_type: null,
+        tags: tagsArray || [],
+        created_at: new Date().toISOString()
+      };
+    } else {
+      const webData = await getWebData(inputTitleValue);
+      if (!webData) {
+        alert('サイトへのアクセスに失敗しました');
+        return;
+      }
+      bookDetails = {
+        id: id,
+        ...webData,
+        tags: tagsArray || [],
+        created_at: new Date().toISOString()
+      };
+    }
+    addBook(bookDetails as BookItem);
     resetAddBookTab();
   });
 }

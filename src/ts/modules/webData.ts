@@ -14,7 +14,7 @@ export const webData = [
     name: "ハーメルン",
     id: "hameln",
     base_url: "https://syosetu.org",
-    url_pattern: "https://syosetu.org/${id}/${chapter_number}/",
+    url_pattern: "https://syosetu.org/novel/${id}/${chapter_number}.html",
     title_pattern: "${title} - ${page_title} - ハーメルン",
     title_top: "${title} - ハーメルン"
   },
@@ -29,7 +29,7 @@ export const webData = [
   {
     name: "はてなブログ",
     id: "hatenablog",
-    base_url: "hatenablog.com",
+    base_url: "hatenablog",
     url_pattern: "https://${variable}.hatenablog.com/entry/${id}",
     title_pattern: "${title} - ${author}",
     title_top: "${title} - ${author}"
@@ -57,14 +57,24 @@ export async function getWebData(url: string) {
     if (!isTop) {
       topUrl = getTopUrl(url, siteData);
     }
+  }
 
-    const ogTitle = await invoke('fetch_og_title', { url: url });
-    if (ogTitle) {
+  const ogTitle = await invoke('fetch_og_title', { url: topUrl });
+  if (ogTitle === 'Just a moment...') {
+    return;
+  }
+  if (ogTitle) {
+    if (siteData) {
+      const isTop = isTopPage(url, siteData);
       const pattern = isTop ? siteData.title_top : siteData.title_pattern;
       title = extractTitle(ogTitle as string, pattern);
+    } else {
+      title = ogTitle as string;
     }
   }
+
   return {
+    success: true,
     type: 'web' as const,
     title: title,
     top_url: topUrl,
@@ -78,9 +88,9 @@ function isTopPage(url: string, siteData: typeof webData[0]): boolean {
 
   switch (siteData.id) {
     case 'narou':
-    case 'hameln':
-      // /n2534js/ or /n2534js のような形式がトップページ
       return /^\/[^\/]+\/?$/.test(pathname);
+    case 'hameln':
+      return /^\/novel\/[^\/]+\/?$/.test(pathname);
     case 'kakuyomu':
       // /works/{id} がトップページ
       return /^\/works\/[^\/]+\/?$/.test(pathname);
@@ -96,12 +106,19 @@ function getTopUrl(url: string, siteData: typeof webData[0]): string {
   const pathname = urlObj.pathname;
 
   switch (siteData.id) {
-    case 'narou':
-    case 'hameln': {
+    case 'narou': {
       // /n2534js/2/ -> /n2534js/
       const match = pathname.match(/^\/([^\/]+)/);
       if (match) {
         return `${urlObj.origin}/${match[1]}/`;
+      }
+      return url;
+    }
+    case 'hameln': {
+      // /novel/346851/3.html -> /novel/346851/
+      const match = pathname.match(/^(\/novel\/[^\/]+)/);
+      if (match) {
+        return `${urlObj.origin}${match[1]}/`;
       }
       return url;
     }
@@ -124,11 +141,24 @@ function getTopUrl(url: string, siteData: typeof webData[0]): string {
 }
 
 function extractTitle(ogTitle: string, pattern: string): string {
-  const regexPattern = pattern
-    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    .replace(/\$\{title\}/g, '(.+?)')
-    .replace(/\$\{page_title\}/g, '.+?')
-    .replace(/\$\{author\}/g, '.+?');
+  const placeholderMap = {
+    title: '___TITLE_PLACEHOLDER___',
+    page_title: '___PAGE_TITLE_PLACEHOLDER___',
+    author: '___AUTHOR_PLACEHOLDER___'
+  };
+
+  let processedPattern = pattern
+    .replace(/\$\{title\}/g, placeholderMap.title)
+    .replace(/\$\{page_title\}/g, placeholderMap.page_title)
+    .replace(/\$\{author\}/g, placeholderMap.author);
+
+  // その他の文字を正規表現用にエスケープ
+  processedPattern = processedPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  const regexPattern = processedPattern
+    .replace(new RegExp(placeholderMap.title, 'g'), '(.+?)')
+    .replace(new RegExp(placeholderMap.page_title, 'g'), '.+?')
+    .replace(new RegExp(placeholderMap.author, 'g'), '.+?');
 
   const regex = new RegExp(`^${regexPattern}$`);
   const match = ogTitle.match(regex);
@@ -136,7 +166,5 @@ function extractTitle(ogTitle: string, pattern: string): string {
   if (match && match[1]) {
     return match[1].trim();
   }
-
-  // マッチしない場合は、ogTitleをそのまま返す
   return ogTitle;
 }
