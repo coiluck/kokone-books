@@ -33,6 +33,14 @@ export const webData = [
     url_pattern: "https://${variable}.hatenablog.com/entry/${id}",
     title_pattern: "${title} - ${author}",
     title_top: "${title} - ${author}"
+  },
+  {
+    name: "不明なサイト",
+    id: "other",
+    base_url: "",
+    url_pattern: "",
+    title_pattern: "",
+    title_top: ""
   }
 ]
 

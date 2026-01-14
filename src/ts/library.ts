@@ -5,10 +5,9 @@ import { settingsState } from "./modules/store";
 
 export async function setUpLibrary() {
   setUpSearch();
-  // setUpBookList();
 }
 
-function setUpSearch() {
+async function setUpSearch() {
   const librarySearchContainer = document.getElementById('library-search-container') as HTMLElement;
   if (!librarySearchContainer) return;
   librarySearchContainer.innerHTML = '';
@@ -81,8 +80,23 @@ function setUpSearch() {
     executeSearch();
   });
 
+  // デフォルトの検索条件を適用
+  for (const tag of settingsState.defaultSearchPositiveTags) {
+    addDefaultSearchTags(tag, 'positive');
+  }
+  for (const tag of settingsState.defaultSearchNegativeTags) {
+    addDefaultSearchTags(tag, 'negative');
+  }
+
   // 初回描画
-  executeSearch();
+  const conditions = {
+    title: '',
+    positiveTags: settingsState.defaultSearchPositiveTags,
+    negativeTags: settingsState.defaultSearchNegativeTags,
+    sortCondition: 'NEWEST' as 'NEWEST' | 'OLDEST',
+  };
+  const books = await searchBooks(conditions);
+  await renderBookList(books);
 }
 
 const addTagChip = (container: HTMLElement, input: HTMLInputElement) => {
@@ -105,6 +119,18 @@ const addTagChip = (container: HTMLElement, input: HTMLInputElement) => {
       executeSearch();
     }
   });
+}
+const addDefaultSearchTags = (tag: string, type: 'positive' | 'negative') => {
+  const container = type === 'positive' ? document.querySelector('#library-search-positive-tags-container') as HTMLElement : document.querySelector('#library-search-negative-tags-container') as HTMLElement;
+  const input = type === 'positive' ? document.querySelector('#library-search-positive-tags') as HTMLInputElement : document.querySelector('#library-search-negative-tags') as HTMLInputElement;
+  const chip = document.createElement('div');
+  chip.className = 'search-tag-chip';
+  chip.textContent = tag;
+  chip.addEventListener('click', () => {
+    chip.remove();
+    executeSearch();
+  });
+  container.insertBefore(chip, input);
 }
 
 const executeSearch = async () => {
@@ -182,7 +208,7 @@ async function renderBookList(books: BookItem[]) {
       bookItem.target = '_blank';
     }
     bookItem.classList.add('library-book-item');
-    const siteName = book.site_type ? webData.find((site) => site.id === book.site_type)?.name : null;
+    const siteName = book.site_type ? webData.find((site) => site.id === book.site_type)?.name : '書籍'; // 外のサイトはundefined
     let itemIcon = '';
     if(book.type === 'web' && settingsState.isNeedIcon) {
       itemIcon = `
@@ -194,7 +220,7 @@ async function renderBookList(books: BookItem[]) {
       <div class="library-book-item-icon-container">
         <div class="library-book-item-icon physical"></div>
       </div>`;
-    }
+    };
     bookItem.innerHTML = `
       ${itemIcon}
       <div class="library-book-item-text">

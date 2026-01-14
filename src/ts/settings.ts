@@ -85,6 +85,8 @@ function setUpAppSettings() {
   }
 }
 
+import { setUpLibrary } from "./library";
+
 function setUpLibrarySettings() {
   // is need icon
   const isNeedIconCheckbox = document.getElementById('setting-is-need-icon') as HTMLInputElement;
@@ -93,28 +95,43 @@ function setUpLibrarySettings() {
     isNeedIconCheckbox.addEventListener('change', (e) => {
       settingsState.isNeedIcon = (e.target as HTMLInputElement).checked;
       saveSettingsData();
+      setUpLibrary();
     });
   }
-  const addDefaultSearchTags = (tag: string, containerElement: HTMLElement, inputElement: HTMLInputElement) => {
+  const defaultSearchPositiveTagsContainer = document.getElementById('setting-default-search-positive-tags-container') as HTMLElement;
+  const defaultSearchPositiveTagsInput = document.getElementById('setting-default-search-positive-tags') as HTMLInputElement;
+  const defaultSearchNegativeTagsContainer = document.getElementById('setting-default-search-negative-tags-container') as HTMLElement;
+  const defaultSearchNegativeTagsInput = document.getElementById('setting-default-search-negative-tags') as HTMLInputElement;
+
+  const addDefaultSearchTags = (tag: string, type: 'positive' | 'negative') => {
+    const containerElement = type === 'positive' ? defaultSearchPositiveTagsContainer : defaultSearchNegativeTagsContainer;
+    const inputElement = type === 'positive' ? defaultSearchPositiveTagsInput : defaultSearchNegativeTagsInput;
     const newTagItem = document.createElement('div');
     newTagItem.className = 'setting-default-search-tag-item';
     newTagItem.textContent = tag;
     newTagItem.addEventListener('click', () => {
-      removeDefaultSearchTags(newTagItem);
+      removeDefaultSearchTags(newTagItem, type);
     });
     containerElement.insertBefore(newTagItem, inputElement);
   }
-  const removeDefaultSearchTags = (tagItem: HTMLElement) => {
-    settingsState.defaultSearchPositiveTags = settingsState.defaultSearchPositiveTags.filter(tag => tag !== tagItem.textContent);
+  const removeDefaultSearchTags = (tagItem: HTMLElement, type: 'positive' | 'negative') => {
+    if (type === 'positive') {
+      settingsState.defaultSearchPositiveTags = settingsState.defaultSearchPositiveTags.filter(
+        tag => tag !== tagItem.textContent
+      );
+    } else {
+      settingsState.defaultSearchNegativeTags = settingsState.defaultSearchNegativeTags.filter(
+        tag => tag !== tagItem.textContent
+      );
+    }
     saveSettingsData();
     tagItem.remove();
   }
+
   // default search positive tags
-  const defaultSearchPositiveTagsContainer = document.getElementById('setting-default-search-positive-tags-container') as HTMLElement;
-  const defaultSearchPositiveTagsInput = document.getElementById('setting-default-search-positive-tags') as HTMLInputElement;
   if (defaultSearchPositiveTagsInput) {
     for (const tag of settingsState.defaultSearchPositiveTags) {
-      addDefaultSearchTags(tag, defaultSearchPositiveTagsContainer, defaultSearchPositiveTagsInput);
+      addDefaultSearchTags(tag, 'positive');
     }
     defaultSearchPositiveTagsInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && defaultSearchPositiveTagsInput.value.trim() !== '') {
@@ -127,16 +144,14 @@ function setUpLibrarySettings() {
         }
         settingsState.defaultSearchPositiveTags.push(newTag);
         saveSettingsData();
-        addDefaultSearchTags(newTag, defaultSearchPositiveTagsContainer, defaultSearchPositiveTagsInput);
+        addDefaultSearchTags(newTag, 'positive');
       }
     });
   }
   // default search negative tags
-  const defaultSearchNegativeTagsContainer = document.getElementById('setting-default-search-negative-tags-container') as HTMLElement;
-  const defaultSearchNegativeTagsInput = document.getElementById('setting-default-search-negative-tags') as HTMLInputElement;
   if (defaultSearchNegativeTagsInput) {
     for (const tag of settingsState.defaultSearchNegativeTags) {
-      addDefaultSearchTags(tag, defaultSearchNegativeTagsContainer, defaultSearchNegativeTagsInput);
+      addDefaultSearchTags(tag, 'negative');
     }
   }
   defaultSearchNegativeTagsInput.addEventListener('keydown', (e) => {
@@ -150,7 +165,7 @@ function setUpLibrarySettings() {
       }
       settingsState.defaultSearchNegativeTags.push(newTag);
       saveSettingsData();
-      addDefaultSearchTags(newTag, defaultSearchNegativeTagsContainer, defaultSearchNegativeTagsInput);
+      addDefaultSearchTags(newTag, 'negative');
     }
   });
 }
