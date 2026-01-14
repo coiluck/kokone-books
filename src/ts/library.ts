@@ -1,10 +1,10 @@
 // library.ts
-import { getBooks } from "./modules/db";
+import { BookItem, getBooks } from "./modules/db";
 import { webData } from "./modules/webData";
 
 export async function setUpLibrary() {
   setUpSearch();
-  setUpBookList();
+  // setUpBookList();
 }
 
 function setUpSearch() {
@@ -27,12 +27,14 @@ function setUpSearch() {
       <div class="search-item">
         <span class="search-label">抽出タグ</span>
         <div class="search-tags-input-container" id="library-search-positive-tags-container">
+          <!-- atode -->
           <input type="text" id="library-search-positive-tags" placeholder="抽出タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
         </div>
       </div>
       <div class="search-item">
         <span class="search-label">除外タグ</span>
         <div class="search-tags-input-container" id="library-search-negative-tags-container">
+          <!-- atode -->
           <input type="text" id="library-search-negative-tags" placeholder="除外タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
         </div>
       </div>
@@ -48,7 +50,7 @@ function setUpSearch() {
     </div>
   `;
   librarySearchContainer.appendChild(detailsModal);
-  
+
   const includeInput = document.querySelector('#library-search-positive-tags') as HTMLInputElement;
   const includeContainer = document.querySelector('#library-search-positive-tags-container') as HTMLElement;
   addTagChip(includeContainer, includeInput);
@@ -56,9 +58,30 @@ function setUpSearch() {
   const excludeInput = document.querySelector('#library-search-negative-tags') as HTMLInputElement;
   const excludeContainer = document.querySelector('#library-search-negative-tags-container') as HTMLElement;
   addTagChip(excludeContainer, excludeInput);
-  
+
   // 検索処理
-  // 後で書く
+  const titleInput = document.getElementById('library-search-title-input') as HTMLInputElement;
+  titleInput.addEventListener('input', executeSearch);
+
+  // ソート
+  const sortRadios = document.querySelectorAll('input[name="search-sort-condition"]') as NodeListOf<HTMLInputElement>;
+    sortRadios.forEach(radio => {
+    radio.addEventListener('change', executeSearch);
+  });
+
+  // クリア
+  const clearButton = document.getElementById('library-search-button-clear') as HTMLButtonElement;
+  clearButton.addEventListener('click', () => {
+    titleInput.value = '';
+    const positiveChips = includeContainer.querySelectorAll('.search-tag-chip');
+    positiveChips.forEach(chip => chip.remove());
+    const negativeChips = excludeContainer.querySelectorAll('.search-tag-chip');
+    negativeChips.forEach(chip => chip.remove());
+    executeSearch();
+  });
+
+  // 初回描画
+  executeSearch();
 }
 
 const addTagChip = (container: HTMLElement, input: HTMLInputElement) => {
@@ -72,19 +95,85 @@ const addTagChip = (container: HTMLElement, input: HTMLInputElement) => {
 
       chip.addEventListener('click', () => {
         chip.remove();
+        executeSearch();
       });
 
       container.insertBefore(chip, input);
       input.value = '';
+
+      executeSearch();
     }
   });
 }
 
-async function setUpBookList() {
+const executeSearch = async () => {
+  const conditions = getSearchConditions();
+  const books = await searchBooks(conditions);
+  await renderBookList(books);
+}
+// 検索条件を取得
+interface SearchConditions {
+  title: string;
+  positiveTags: string[];
+  negativeTags: string[];
+  sortCondition: 'NEWEST' | 'OLDEST';
+}
+function getSearchConditions(): SearchConditions {
+  const titleInput = document.querySelector('#library-search-title-input') as HTMLInputElement;
+  const title = titleInput?.value.trim() || '';
+
+  const positiveContainer = document.querySelector('#library-search-positive-tags-container') as HTMLElement;
+  const positiveChips = positiveContainer?.querySelectorAll('.search-tag-chip') || [];
+  const positiveTags = Array.from(positiveChips).map(chip => chip.textContent?.trim() || '').filter(Boolean);
+
+  const negativeContainer = document.querySelector('#library-search-negative-tags-container') as HTMLElement;
+  const negativeChips = negativeContainer?.querySelectorAll('.search-tag-chip') || [];
+  const negativeTags = Array.from(negativeChips).map(chip => chip.textContent?.trim() || '').filter(Boolean);
+
+  const sortRadio = document.querySelector('input[name="search-sort-condition"]:checked') as HTMLInputElement;
+  const sortCondition = (sortRadio?.value as 'NEWEST' | 'OLDEST') || 'NEWEST';
+
+  return { title, positiveTags, negativeTags, sortCondition };
+}
+
+async function searchBooks(conditions: SearchConditions): Promise<BookItem[]> {
+  const books = await getBooks();
+
+  // フィルタリング
+  let filteredBooks = books.filter((book) => {
+    // タイトル
+    if (conditions.title && !book.title.includes(conditions.title)) {
+      return false;
+    }
+    // 抽出タグ
+    if (conditions.positiveTags.length > 0) {
+      const hasAllPositiveTags = conditions.positiveTags.every(tag => book.tags.includes(tag));
+      if (!hasAllPositiveTags) {
+        return false;
+      }
+    }
+    // 除外タグ
+    if (conditions.negativeTags.length > 0) {
+      const hasAnyNegativeTag = conditions.negativeTags.some(tag => book.tags.includes(tag));
+      if (hasAnyNegativeTag) {
+        return false;
+      }
+    }
+    return true;
+  });
+  // ソート
+  filteredBooks.sort((a, b) => {
+    const dateA = new Date(a.created_at).getTime();
+    const dateB = new Date(b.created_at).getTime();
+    return conditions.sortCondition === 'NEWEST' ? dateB - dateA : dateA - dateB;
+  });
+  return filteredBooks;
+}
+
+async function renderBookList(books: BookItem[]) {
   const libraryBookListContainer = document.getElementById('library-book-list-container') as HTMLElement;
   if (!libraryBookListContainer) return;
   libraryBookListContainer.innerHTML = '';
-  const books = await getBooks();
   books.forEach((book) => {
     const bookItem = document.createElement('a');
     if(book.type === 'web' && book.top_url) {
@@ -108,14 +197,16 @@ async function setUpBookList() {
 
     const allTagsElements = bookItem.querySelectorAll('.library-book-item-tag') as NodeListOf<HTMLElement>;
     for (const tagElement of allTagsElements) {
-      tagElement.addEventListener('click', () => {
+      tagElement.addEventListener('click', (e) => {
         const tag= ((tagElement as HTMLElement).dataset.tag as string);
+        e.preventDefault();
         console.log(tag); // 後で書く
       });
     }
 
     const editButton = bookItem.querySelector('.library-book-item-edit') as HTMLElement;
-    editButton.addEventListener('click', () => {
+    editButton.addEventListener('click', (e) => {
+      e.preventDefault();
       console.log('edit'); // 後で書く
     });
 
