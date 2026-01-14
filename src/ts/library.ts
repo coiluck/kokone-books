@@ -1,6 +1,7 @@
 // library.ts
 import { BookItem, getBooks } from "./modules/db";
 import { webData } from "./modules/webData";
+import { settingsState } from "./modules/store";
 
 export async function setUpLibrary() {
   setUpSearch();
@@ -182,14 +183,29 @@ async function renderBookList(books: BookItem[]) {
     }
     bookItem.classList.add('library-book-item');
     const siteName = book.site_type ? webData.find((site) => site.id === book.site_type)?.name : null;
+    let itemIcon = '';
+    if(book.type === 'web' && settingsState.isNeedIcon) {
+      itemIcon = `
+      <div class="library-book-item-icon-container">
+        <div class="library-book-item-icon web"></div>
+      </div>`;
+    } else if(book.type === 'physical' && settingsState.isNeedIcon) {
+      itemIcon = `
+      <div class="library-book-item-icon-container">
+        <div class="library-book-item-icon physical"></div>
+      </div>`;
+    }
     bookItem.innerHTML = `
+      ${itemIcon}
       <div class="library-book-item-text">
         <div class="library-book-item-title">${book.title}</div>
-        <div class="library-book-item-tags">${book.tags.map((tag) => `<span class="library-book-item-tag" data-tag="${tag}">${tag}</span>`).join('')}</div>
         <div class="library-book-item-metadata">
           <span>${book.created_at.split('T')[0]}</span>
           <span>•</span>
           <span>${siteName}</span>
+          <div class="library-book-item-tags">
+            ${book.tags.map((tag) => `<span class="library-book-item-tag" data-tag="${tag}">${tag}</span>`).join('')}
+          </div>
         </div>
       </div>
       <div class="library-book-item-edit"></div>

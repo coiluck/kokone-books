@@ -8,9 +8,12 @@ interface SettingsState {
   textColor: string;
   bgColor: string;
   bgMildLevel: number;
+  // add
   autoInput: 'Tab' | 'Focus' | 'Off';
   autoInputOnlyUrl: boolean;
   presetTags: string[];
+  // library
+  isNeedIcon: boolean;
 }
 
 const initialSettingsState: SettingsState = {
@@ -25,6 +28,8 @@ const initialSettingsState: SettingsState = {
   autoInput: 'Focus',
   autoInputOnlyUrl: true,
   presetTags: [],
+  // library
+  isNeedIcon: true,
 };
 
 export const settingsState = structuredClone(initialSettingsState);
