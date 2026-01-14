@@ -4,6 +4,7 @@ import { settingsState, saveSettingsData } from "./modules/store";
 export function setUpSettings() {
   setUpAppearanceSettings();
   setUpAppSettings();
+  setUpLibrarySettings();
   setUpAddSettings();
   setUpOtherSettings();
 }
@@ -84,6 +85,76 @@ function setUpAppSettings() {
   }
 }
 
+function setUpLibrarySettings() {
+  // is need icon
+  const isNeedIconCheckbox = document.getElementById('setting-is-need-icon') as HTMLInputElement;
+  if (isNeedIconCheckbox) {
+    isNeedIconCheckbox.checked = settingsState.isNeedIcon ?? true;
+    isNeedIconCheckbox.addEventListener('change', (e) => {
+      settingsState.isNeedIcon = (e.target as HTMLInputElement).checked;
+      saveSettingsData();
+    });
+  }
+  const addDefaultSearchTags = (tag: string, containerElement: HTMLElement, inputElement: HTMLInputElement) => {
+    const newTagItem = document.createElement('div');
+    newTagItem.className = 'setting-default-search-tag-item';
+    newTagItem.textContent = tag;
+    newTagItem.addEventListener('click', () => {
+      removeDefaultSearchTags(newTagItem);
+    });
+    containerElement.insertBefore(newTagItem, inputElement);
+  }
+  const removeDefaultSearchTags = (tagItem: HTMLElement) => {
+    settingsState.defaultSearchPositiveTags = settingsState.defaultSearchPositiveTags.filter(tag => tag !== tagItem.textContent);
+    saveSettingsData();
+    tagItem.remove();
+  }
+  // default search positive tags
+  const defaultSearchPositiveTagsContainer = document.getElementById('setting-default-search-positive-tags-container') as HTMLElement;
+  const defaultSearchPositiveTagsInput = document.getElementById('setting-default-search-positive-tags') as HTMLInputElement;
+  if (defaultSearchPositiveTagsInput) {
+    for (const tag of settingsState.defaultSearchPositiveTags) {
+      addDefaultSearchTags(tag, defaultSearchPositiveTagsContainer, defaultSearchPositiveTagsInput);
+    }
+    defaultSearchPositiveTagsInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && defaultSearchPositiveTagsInput.value.trim() !== '') {
+        const newTag = defaultSearchPositiveTagsInput.value.trim();
+        defaultSearchPositiveTagsInput.value = '';
+        if (settingsState.defaultSearchPositiveTags.includes(newTag)) {
+          // すでに存在する場合
+          // 後で書く
+          return;
+        }
+        settingsState.defaultSearchPositiveTags.push(newTag);
+        saveSettingsData();
+        addDefaultSearchTags(newTag, defaultSearchPositiveTagsContainer, defaultSearchPositiveTagsInput);
+      }
+    });
+  }
+  // default search negative tags
+  const defaultSearchNegativeTagsContainer = document.getElementById('setting-default-search-negative-tags-container') as HTMLElement;
+  const defaultSearchNegativeTagsInput = document.getElementById('setting-default-search-negative-tags') as HTMLInputElement;
+  if (defaultSearchNegativeTagsInput) {
+    for (const tag of settingsState.defaultSearchNegativeTags) {
+      addDefaultSearchTags(tag, defaultSearchNegativeTagsContainer, defaultSearchNegativeTagsInput);
+    }
+  }
+  defaultSearchNegativeTagsInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && defaultSearchNegativeTagsInput.value.trim() !== '') {
+      const newTag = defaultSearchNegativeTagsInput.value.trim();
+      defaultSearchNegativeTagsInput.value = '';
+      if (settingsState.defaultSearchNegativeTags.includes(newTag)) {
+        // すでに存在する場合
+        // 後で書く
+        return;
+      }
+      settingsState.defaultSearchNegativeTags.push(newTag);
+      saveSettingsData();
+      addDefaultSearchTags(newTag, defaultSearchNegativeTagsContainer, defaultSearchNegativeTagsInput);
+    }
+  });
+}
+
 import { setUpPresetTags } from "./add";
 
 function setUpAddSettings() {
@@ -93,7 +164,7 @@ function setUpAddSettings() {
     autoInputSelect.value = settingsState.autoInput ?? 'Focus';
     autoInputSelect.addEventListener('change', (e) => {
       const selectedAutoInput = (e.target as HTMLSelectElement).value;
-      settingsState.autoInput = selectedAutoInput as 'Tab' | 'Focus' | 'Off';
+      settingsState.autoInput = selectedAutoInput as 'Focus' | 'Off';
       saveSettingsData();
     });
   }

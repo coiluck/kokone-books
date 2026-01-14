@@ -9,11 +9,13 @@ interface SettingsState {
   bgColor: string;
   bgMildLevel: number;
   // add
-  autoInput: 'Tab' | 'Focus' | 'Off';
+  autoInput: 'Focus' | 'Off';
   autoInputOnlyUrl: boolean;
   presetTags: string[];
   // library
   isNeedIcon: boolean;
+  defaultSearchPositiveTags: string[];
+  defaultSearchNegativeTags: string[];
 }
 
 const initialSettingsState: SettingsState = {
@@ -30,6 +32,8 @@ const initialSettingsState: SettingsState = {
   presetTags: [],
   // library
   isNeedIcon: true,
+  defaultSearchPositiveTags: [],
+  defaultSearchNegativeTags: [],
 };
 
 export const settingsState = structuredClone(initialSettingsState);

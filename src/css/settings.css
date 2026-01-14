@@ -199,7 +199,7 @@ select.setting-select option {
   opacity: .6;
 }
 
-.setting-item input[type="text"] {
+.setting-item input[type="text"]#setting-preset-tags {
   width: 100%;
   max-width: clamp(150px, 50vw, 250px);
   background: var(--bg);
@@ -211,15 +211,56 @@ select.setting-select option {
   outline: none;
   transition: all 0.3s ease;
 }
-.setting-item input[type="text"]:focus {
+.setting-item input[type="text"]#setting-preset-tags:focus {
   border: 1px solid var(--accent);
 }
 
+/* preset tags */
 .setting-tags-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 5px;
+}
+/* default search tags */
+.setting-tags-input-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--bg-hover);
+  border-radius: 5px;
+  background: var(--bg);
+  outline: none;
+}
+.setting-tags-input-container input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-family: var(--font);
+}
+.setting-tags-input-container input[type="text"]::placeholder {
+  color: var(--text);
+  opacity: 0.5;
+}
+.setting-default-search-tag-item {
+  position: relative;
+  padding: 4px 8px;
+  font-size: .8rem;
+  background: rgb(from var(--accent) r g b / 0.2);
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 .setting-tag-item {
   position: relative;
@@ -231,11 +272,11 @@ select.setting-select option {
   transition: all 0.3s ease;
   cursor: pointer;
 }
-.setting-tag-item::before {
+.setting-default-search-tag-item::before, .setting-tag-item::before {
   content: '#';
   color: var(--accent);
 }
-.setting-tag-item::after {
+.setting-default-search-tag-item::after, .setting-tag-item::after {
   content: '×';
   color: var(--text);
   padding: 4px;

@@ -142,12 +142,33 @@
               </select>
             </div>
           </section>
+          <div class="settings-subtitle">Library</div>
+          <section class="settings-section">
+            <div class="setting-item">
+              <span class="setting-label">アイコンを表示</span>
+              <label class="switch">
+                <input type="checkbox" id="setting-is-need-icon">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <span class="setting-label">デフォルトの抽出タグ</span>
+              <div class="setting-tags-input-container" id="setting-default-search-positive-tags-container">
+                <input type="text" id="setting-default-search-positive-tags" placeholder="タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
+              </div>
+            </div>
+            <div class="setting-item">
+              <span class="setting-label">デフォルトの除外タグ</span>
+              <div class="setting-tags-input-container" id="setting-default-search-negative-tags-container">
+                <input type="text" id="setting-default-search-negative-tags" placeholder="タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
+              </div>
+            </div>
+          </section>
           <div class="settings-subtitle">Add Books</div>
           <section class="settings-section">
             <div class="setting-item">
               <span class="setting-label">自動入力</span>
               <select class="setting-select" id="setting-auto-input">
-                <option value="Tab">Tab</option>
                 <option value="Focus">Focus</option>
                 <option value="Off">Off</option>
               </select>
