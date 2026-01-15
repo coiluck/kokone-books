@@ -30,7 +30,7 @@ export const showEditMenu = (book: BookItem, editButton: HTMLElement) => {
   `;
 
   document.getElementById('edit-menu-item-edit')?.addEventListener('click', () => {
-    console.log('edit');
+    openEditSubModal(book);
     closeEditMenu();
   });
   document.getElementById('edit-menu-item-delete')?.addEventListener('click', () => {
@@ -45,5 +45,60 @@ export const closeEditMenu = () => {
     editMenus.forEach(menu => {
       menu.remove();
     });
+  }
+}
+
+function openEditSubModal(book: BookItem) {
+  const overlay = document.createElement('div');
+  overlay.id = 'sub-modal-overlay';
+
+  const urlItem = book.type === 'web' && book.top_url ?
+  `<div class="edit-content-item">
+    <p>URL</p>
+    <input type="text" id="edit-url-input" value="${book.top_url}" />
+  </div>` : '';
+
+  overlay.innerHTML = `
+    <div class="sub-modal">
+      <p class="edit-title">情報を編集</p>
+      <div class="edit-content">
+        <div class="edit-content-item">
+          <p>タイトル</p>
+          <input type="text" id="edit-title-input" value="${book.title}" />
+        </div>
+        ${urlItem}
+        <div class="edit-content-item">
+          <p>タグ</p>
+          <input type="text" id="edit-tags-input" value="${book.tags.join(', ')}" />
+        </div>
+      </div>
+      <div class="edit-button-container">
+        <button id="edit-button-cancel">Cancel</button>
+        <button id="edit-button-save">Save</button>
+      </div>
+    </div>
+  `;
+  document.querySelector('.main-container')?.appendChild(overlay);
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      closeEditSubModal();
+    }
+  });
+  document.getElementById('edit-button-cancel')?.addEventListener('click', () => {
+    closeEditSubModal();
+  });
+  document.getElementById('edit-button-save')?.addEventListener('click', () => {
+    console.log('save');
+    closeEditSubModal();
+  });
+}
+
+export const closeEditSubModal = () => {
+  // 基本は上のopenEditSubModal関数内のイベントリスナでいいけど
+  // .tabs-containerの中をクリックしてもとじないのが気になるからchangeModal内に書いておく
+  const overlay = document.getElementById('sub-modal-overlay');
+  if (overlay) {
+    overlay.remove();
   }
 }

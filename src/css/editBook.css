@@ -50,3 +50,70 @@
 .edit-menu-item span {
   font-size: .8rem;
 }
+
+
+/* sub modal */
+#sub-modal-overlay .edit-title {
+  position: relative;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border-bottom: 1px solid var(--accent);
+}
+#sub-modal-overlay .edit-title::before {
+  content: '#';
+  color: var(--accent);
+  padding-right: .2rem;
+}
+#sub-modal-overlay .edit-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+#sub-modal-overlay .edit-content input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--bg-hover);
+  border-radius: 5px;
+  background: var(--bg-mild);
+  outline: none;
+  transition: all 0.3s ease;
+  &:focus {
+    border: 1px solid var(--accent);
+  }
+}
+
+#sub-modal-overlay .edit-button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+#sub-modal-overlay .edit-button-container button {
+  flex: 1;
+  max-width: 200px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+#sub-modal-overlay .edit-button-container button#edit-button-cancel {
+  background: var(--bg-hover);
+  transition: all 0.3s ease;
+  &:hover {
+    background: color-mix(in srgb, var(--bg-hover) 90%, black);
+  }
+}
+#sub-modal-overlay .edit-button-container button#edit-button-save {
+  color: var(--bg);
+  background: var(--accent);
+  transition: all 0.3s ease;
+  &:hover {
+    background: color-mix(in srgb, var(--accent) 90%, black);
+  }
+}
