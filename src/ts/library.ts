@@ -249,9 +249,12 @@ async function renderBookList(books: BookItem[]) {
     const editButton = bookItem.querySelector('.library-book-item-edit') as HTMLElement;
     editButton.addEventListener('click', (e) => {
       e.preventDefault();
-      console.log('edit'); // 後で書く
+      e.stopPropagation();
+      showEditMenu(book, editButton);
     });
 
     libraryBookListContainer.appendChild(bookItem);
   });
 }
+
+import { showEditMenu } from "./modules/editBook";

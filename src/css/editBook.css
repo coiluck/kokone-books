@@ -1,0 +1,52 @@
+.edit-menu {
+  position: absolute;
+  background-color: var(--bg-mild);
+  border: 1px solid var(--text);
+  border-radius: 10px;
+  z-index: 1000;
+  overflow: hidden;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.edit-menu-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 15px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.edit-menu-item#edit-menu-item-edit:hover {
+  background-color: var(--bg-hover);
+}
+.edit-menu-item#edit-menu-item-delete:hover {
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
+.edit-menu-icon {
+  width: .9rem;
+  height: .9rem;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: var(--text);
+}
+.edit-menu-icon#edit-menu-icon-edit {
+  mask-image: url(../assets/images/edit_pen.svg);
+}
+.edit-menu-icon#edit-menu-icon-delete {
+  mask-image: url(../assets/images/edit_trashcan.svg);
+}
+
+.edit-menu-item span {
+  font-size: .8rem;
+}

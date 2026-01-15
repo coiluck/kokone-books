@@ -5,6 +5,7 @@ import { initDB } from "./modules/db";
 import { setUpLibrary } from "./library";
 import { setUpAdd } from "./add";
 import { setUpSettings } from "./settings";
+import { closeEditMenu } from "./modules/editBook";
 
 window.addEventListener("DOMContentLoaded", async () => {
   await applyStore();
@@ -13,4 +14,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   setUpLibrary();
   setUpAdd();
   setUpSettings();
+  document.addEventListener('click', () => {
+    closeEditMenu();
+  });
 });
