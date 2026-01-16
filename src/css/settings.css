@@ -236,6 +236,10 @@ select.setting-select option {
   border-radius: 5px;
   background: var(--bg);
   outline: none;
+  transition: all 0.3s ease;
+}
+.setting-tags-input-container:focus-within {
+  border: 1px solid var(--accent);
 }
 .setting-tags-input-container input[type="text"] {
   flex: 1;

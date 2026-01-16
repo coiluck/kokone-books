@@ -275,3 +275,17 @@
   color: var(--text);
   opacity: 0.5;
 }
+
+
+.search-item input[type="text"]#library-search-title-input {
+  transition: all 0.3s ease;
+}
+.search-item input[type="text"]#library-search-title-input:focus {
+  border: 1px solid var(--accent);
+}
+.search-tags-input-container {
+  transition: all 0.3s ease;
+}
+.search-tags-input-container:focus-within {
+  border: 1px solid var(--accent);
+}

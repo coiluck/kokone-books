@@ -7,6 +7,20 @@
   outline: none;
 }
 
+#add-book-title {
+  transition: all 0.3s ease;
+}
+#add-book-title:focus {
+  border: 1px solid var(--accent);
+}
+.add-book-tags-input-container {
+  border: 1px solid var(--bg-hover);
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+.add-book-tags-input-container:focus-within {
+  border: 1px solid var(--accent);
+}
 
 #add-book-tags-input-suggestions, #add-book-tags-suggestions {
   display: flex;
