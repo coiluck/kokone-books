@@ -142,3 +142,91 @@ export async function deleteBook(id: string) {
   const db = await initDB();
   await db.execute('DELETE FROM books WHERE id = $1', [id]);
 }
+
+import { save, open } from '@tauri-apps/plugin-dialog';
+import { writeTextFile, readTextFile } from '@tauri-apps/plugin-fs';
+
+export async function exportDatabase(): Promise<void> {
+  try {
+    const books = await getBooks();
+
+    const exportData: ExportData = {
+      version: CURRENT_SCHEMA_VERSION,
+      exported_at: new Date().toISOString(),
+      books
+    };
+
+    const filePath = await save({
+      defaultPath: `kokone-books-backup-${new Date().toISOString().split('T')[0]}.json`,
+      filters: [{
+        name: 'JSON',
+        extensions: ['json']
+      }]
+    });
+
+    if (filePath) {
+      await writeTextFile(filePath, JSON.stringify(exportData, null, 2));
+      console.log('Database exported successfully to:', filePath);
+    }
+  } catch (error) {
+    console.error('Error exporting database:', error);
+    throw error;
+  }
+}
+
+export interface ExportData {
+  version: number;
+  exported_at: string;
+  books: BookItem[];
+}
+
+export async function importDatabase(): Promise<number> {
+  try {
+    const filePath = await open({
+      multiple: false,
+      filters: [{
+        name: 'JSON',
+        extensions: ['json']
+      }]
+    });
+
+    if (!filePath) {
+      return 0;
+    }
+
+    const fileContent = await readTextFile(filePath as string);
+    const importData: ExportData = JSON.parse(fileContent);
+
+    // バージョンチェック
+    if (!importData.version || !importData.books) {
+      throw new Error('Invalid export file format');
+    }
+
+    const db = await initDB();
+
+    // インポート
+    let importedCount = 0;
+    for (const book of importData.books) {
+      try {
+        const existing = await db.select<BookTable[]>(
+          'SELECT id FROM books WHERE id = $1',
+          [book.id]
+        );
+        if (existing.length > 0) {
+          // 同じidが存在
+          console.log(`Skipping duplicate book: ${book.title} (${book.id})`);
+          continue;
+        }
+        await addBook(book);
+        importedCount++;
+      } catch (error) {
+        console.error(`Error importing book ${book.title}:`, error);
+      }
+    }
+    console.log(`Successfully imported ${importedCount} books`);
+    return importedCount;
+  } catch (error) {
+    console.error('Error importing database:', error);
+    throw error;
+  }
+}

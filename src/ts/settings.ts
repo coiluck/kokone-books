@@ -239,6 +239,7 @@ function setUpAddSettings() {
 }
 
 import packageJson from '../../package.json';
+import { exportDatabase, importDatabase } from "./modules/db";
 
 function setUpOtherSettings() {
   // app version
@@ -247,5 +248,17 @@ function setUpOtherSettings() {
     appVersion.textContent = packageJson.version;
   }
   // export
+  const exportDatabaseButton = document.getElementById('setting-export-database') as HTMLButtonElement;
+  if (exportDatabaseButton) {
+    exportDatabaseButton.addEventListener('click', () => {
+      exportDatabase();
+    });
+  }
   // import
+  const importDatabaseButton = document.getElementById('setting-import-database') as HTMLButtonElement;
+  if (importDatabaseButton) {
+    importDatabaseButton.addEventListener('click', () => {
+      importDatabase();
+    });
+  }
 }
