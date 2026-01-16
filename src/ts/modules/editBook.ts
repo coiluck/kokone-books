@@ -1,5 +1,5 @@
 // editBook.ts
-import { BookItem } from "./db";
+import { BookItem, deleteBook } from "./db";
 
 export const showEditMenu = (book: BookItem, editButton: HTMLElement) => {
   // 閉じる処理
@@ -33,9 +33,10 @@ export const showEditMenu = (book: BookItem, editButton: HTMLElement) => {
     openEditSubModal(book);
     closeEditMenu();
   });
-  document.getElementById('edit-menu-item-delete')?.addEventListener('click', () => {
-    console.log('delete');
+  document.getElementById('edit-menu-item-delete')?.addEventListener('click', async () => {
     closeEditMenu();
+    await deleteBook(book.id);
+    executeSearch();
   });
 }
 
