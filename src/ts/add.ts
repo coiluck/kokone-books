@@ -8,6 +8,23 @@ export function setUpAdd() {
   setUpInputTags();
   setUpPresetTags();
 
+  const addBookTitle = document.getElementById('add-book-title') as HTMLInputElement;
+  addBookTitle.addEventListener('focus', async () => {
+    // 自動入力
+    const userCopyText = await navigator.clipboard.readText();
+    if (settingsState.autoInput === 'Focus' && addBookTitle.value.trim() === '') {
+      if (settingsState.autoInputOnlyUrl) {
+        // copy
+        if (URL.canParse(userCopyText.trim())) {
+          addBookTitle.value = userCopyText.trim();
+        }
+      } else {
+        // copy
+        addBookTitle.value = userCopyText.trim();
+      }
+    }
+  });
+
   const addBookCancel = document.getElementById('add-book-cancel') as HTMLButtonElement;
   addBookCancel.addEventListener('click', () => {
     resetAddBookTab();
