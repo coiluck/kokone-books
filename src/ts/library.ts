@@ -133,7 +133,7 @@ const addDefaultSearchTags = (tag: string, type: 'positive' | 'negative') => {
   container.insertBefore(chip, input);
 }
 
-const executeSearch = async () => {
+export const executeSearch = async () => {
   const conditions = getSearchConditions();
   const books = await searchBooks(conditions);
   await renderBookList(books);

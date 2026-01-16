@@ -55,7 +55,7 @@ function openEditSubModal(book: BookItem) {
   const urlItem = book.type === 'web' && book.top_url ?
   `<div class="edit-content-item">
     <p>URL</p>
-    <input type="text" id="edit-url-input" value="${book.top_url}" />
+    <input type="text" id="edit-url-input" value="${book.top_url}" spellcheck="false" autocomplete="off" />
   </div>` : '';
 
   overlay.innerHTML = `
@@ -64,12 +64,12 @@ function openEditSubModal(book: BookItem) {
       <div class="edit-content">
         <div class="edit-content-item">
           <p>タイトル</p>
-          <input type="text" id="edit-title-input" value="${book.title}" />
+          <input type="text" id="edit-title-input" value="${book.title}" spellcheck="false" autocomplete="off" />
         </div>
         ${urlItem}
         <div class="edit-content-item">
           <p>タグ</p>
-          <input type="text" id="edit-tags-input" value="${book.tags.join(', ')}" />
+          <input type="text" id="edit-tags-input" value="${book.tags.join(', ')}" spellcheck="false" autocomplete="off" />
         </div>
       </div>
       <div class="edit-button-container">
@@ -89,7 +89,7 @@ function openEditSubModal(book: BookItem) {
     closeEditSubModal();
   });
   document.getElementById('edit-button-save')?.addEventListener('click', () => {
-    console.log('save');
+    saveBook(book);
     closeEditSubModal();
   });
 }
@@ -101,4 +101,38 @@ export const closeEditSubModal = () => {
   if (overlay) {
     overlay.remove();
   }
+}
+
+import { updateBook } from "./db";
+import { webData } from "./webData";
+import { executeSearch } from "../library";
+
+async function saveBook(book: BookItem) {
+  const titleInput = document.getElementById('edit-title-input') as HTMLInputElement;
+  const urlInput = document.getElementById('edit-url-input') as HTMLInputElement;
+  const tagsInput = document.getElementById('edit-tags-input') as HTMLInputElement;
+  if (titleInput && tagsInput) {
+    // 値の取得と整形
+    const newTitle = titleInput.value.trim();
+    const newTags = tagsInput.value
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(tag => tag !== '');
+
+    const updatedBook: BookItem = { ...book };
+    updatedBook.title = newTitle;
+    updatedBook.tags = newTags;
+
+    if (updatedBook.type === 'web' && urlInput) {
+      const newUrl = urlInput.value.trim();
+      if (newUrl !== updatedBook.top_url) {
+        updatedBook.top_url = newUrl;
+        const siteData = webData.find(data => newUrl.includes(data.base_url));
+        updatedBook.site_type = siteData ? (siteData.id as any) : 'other';
+      }
+    }
+    await updateBook(updatedBook);
+  }
+  // 描画も必要
+  executeSearch();
 }
