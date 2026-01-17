@@ -122,6 +122,15 @@ export async function getBooks(): Promise<BookItem[]> {
   }));
 }
 
+export async function checkUrlExists(url: string): Promise<boolean> {
+  const db = await initDB();
+  const result = await db.select<BookTable[]>(
+    'SELECT id FROM books WHERE top_url = $1',
+    [url]
+  );
+  return result.length > 0;
+}
+
 export async function updateBook(book: BookItem) {
   const db = await initDB();
   await db.execute(

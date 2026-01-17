@@ -1,6 +1,6 @@
 // add.ts
 import { v4 as uuid } from 'uuid';
-import { addBook, BookItem } from "./modules/db";
+import { addBook, BookItem, checkUrlExists } from "./modules/db";
 import { settingsState } from "./modules/store";
 import { getWebData } from "./modules/webData"
 
@@ -22,6 +22,24 @@ export function setUpAdd() {
         // copy
         addBookTitle.value = userCopyText.trim();
       }
+    }
+  });
+  // URLの重複チェック
+  addBookTitle.addEventListener('input', async () => {
+    const inputValue = addBookTitle.value.trim();
+
+    if (!URL.canParse(inputValue)) return;
+
+    const webData = await getWebData(inputValue);
+    if (!webData) {
+      return;
+    }
+
+    const topUrl = webData.top_url;
+    const urlExists = await checkUrlExists(topUrl);
+
+    if (urlExists) {
+      alert('このURLはすでに登録されています');
     }
   });
 
