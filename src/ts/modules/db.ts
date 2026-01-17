@@ -154,6 +154,7 @@ export async function deleteBook(id: string) {
 
 import { save, open } from '@tauri-apps/plugin-dialog';
 import { writeTextFile, readTextFile } from '@tauri-apps/plugin-fs';
+import { showMessage } from "./message";
 
 export async function exportDatabase(): Promise<void> {
   try {
@@ -175,10 +176,10 @@ export async function exportDatabase(): Promise<void> {
 
     if (filePath) {
       await writeTextFile(filePath, JSON.stringify(exportData, null, 2));
-      console.log('Database exported successfully to:', filePath);
+      showMessage('バックアップを保存しました');
     }
   } catch (error) {
-    console.error('Error exporting database:', error);
+    showMessage('データベースのエクスポートに失敗しました');
     throw error;
   }
 }
@@ -208,13 +209,18 @@ export async function importDatabase(): Promise<number> {
 
     // バージョンチェック
     if (!importData.version || !importData.books) {
-      throw new Error('Invalid export file format');
+      showMessage('無効なエクスポートファイルです');
+      return 0;
     }
 
     const db = await initDB();
 
     // インポート
     let importedCount = 0;
+    let duplicatedData = {
+      title: [] as string[],
+      count: 0
+    }
     for (const book of importData.books) {
       try {
         const existing = await db.select<BookTable[]>(
@@ -223,7 +229,8 @@ export async function importDatabase(): Promise<number> {
         );
         if (existing.length > 0) {
           // 同じidが存在
-          console.log(`Skipping duplicate book: ${book.title} (${book.id})`);
+          duplicatedData.title.push(book.title);
+          duplicatedData.count++;
           continue;
         }
         await addBook(book);
@@ -232,10 +239,18 @@ export async function importDatabase(): Promise<number> {
         console.error(`Error importing book ${book.title}:`, error);
       }
     }
-    console.log(`Successfully imported ${importedCount} books`);
+    showMessage(`${importedCount}冊のデータをインポートしました`);
+    if (duplicatedData.count > 0) {
+      showMessage(`${duplicatedData.count}冊のデータが重複しています`);
+      const twoTitles = duplicatedData.title.slice(0, 2);
+      showMessage(`重複しているデータのタイトル: \n${twoTitles.map(t => `・${t}`).join('\n')}`);
+      if (duplicatedData.title.length > 2) {
+        showMessage(`... その他 ${duplicatedData.title.length - 2}冊`);
+      }
+    }
     return importedCount;
   } catch (error) {
-    console.error('Error importing database:', error);
+    showMessage('データのインポートに失敗しました');
     throw error;
   }
 }

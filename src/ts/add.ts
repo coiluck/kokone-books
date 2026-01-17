@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { addBook, BookItem, checkUrlExists } from "./modules/db";
 import { settingsState } from "./modules/store";
 import { getWebData } from "./modules/webData"
+import { showMessage } from "./modules/message";
 
 export function setUpAdd() {
   setUpInputTags();
@@ -17,15 +18,20 @@ export function setUpAdd() {
         // copy
         if (URL.canParse(userCopyText.trim())) {
           addBookTitle.value = userCopyText.trim();
+          checkInputValue();
         }
       } else {
         // copy
         addBookTitle.value = userCopyText.trim();
+        checkInputValue();
       }
     }
   });
   // URLの重複チェック
   addBookTitle.addEventListener('input', async () => {
+    checkInputValue();
+  });
+  const checkInputValue = async () => {
     const inputValue = addBookTitle.value.trim();
 
     if (!URL.canParse(inputValue)) return;
@@ -39,9 +45,9 @@ export function setUpAdd() {
     const urlExists = await checkUrlExists(topUrl);
 
     if (urlExists) {
-      alert('このURLはすでに登録されています');
+      showMessage('このURLはすでに登録されています');
     }
-  });
+  }
 
   const addBookCancel = document.getElementById('add-book-cancel') as HTMLButtonElement;
   addBookCancel.addEventListener('click', () => {
@@ -67,7 +73,7 @@ export function setUpAdd() {
     } else {
       const webData = await getWebData(inputTitleValue);
       if (!webData) {
-        alert('サイトへのアクセスに失敗しました');
+        showMessage('サイトへのアクセスに失敗しました');
         return;
       }
       bookDetails = {

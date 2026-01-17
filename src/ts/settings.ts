@@ -86,6 +86,7 @@ function setUpAppSettings() {
 }
 
 import { setUpLibrary } from "./library";
+import { showMessage } from "./modules/message";
 
 function setUpLibrarySettings() {
   // is need icon
@@ -139,7 +140,7 @@ function setUpLibrarySettings() {
         defaultSearchPositiveTagsInput.value = '';
         if (settingsState.defaultSearchPositiveTags.includes(newTag)) {
           // すでに存在する場合
-          // 後で書く
+          showMessage(`#${newTag} はすでに登録されています`);
           return;
         }
         settingsState.defaultSearchPositiveTags.push(newTag);
@@ -160,7 +161,7 @@ function setUpLibrarySettings() {
       defaultSearchNegativeTagsInput.value = '';
       if (settingsState.defaultSearchNegativeTags.includes(newTag)) {
         // すでに存在する場合
-        // 後で書く
+        showMessage(`#${newTag} はすでに登録されています`);
         return;
       }
       settingsState.defaultSearchNegativeTags.push(newTag);
@@ -226,8 +227,7 @@ function setUpAddSettings() {
       const newTag = presetTagsInput.value.trim();
       presetTagsInput.value = '';
       if (settingsState.presetTags.includes(newTag)) {
-        // すでに存在する場合
-        // 後で書く
+        showMessage(`#${newTag} はすでに登録されています`);
         return;
       }
       settingsState.presetTags.push(newTag);
