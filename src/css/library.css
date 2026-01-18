@@ -199,6 +199,10 @@
   background: var(--bg);
   outline: none;
 }
+.search-item input[type="text"]#library-search-title-input::placeholder {
+  color: var(--text);
+  opacity: 0.5;
+}
 
 .search-sort-item {
   display: flex;

@@ -26,6 +26,7 @@
     "fs:default",
     "fs:allow-write-text-file",
     "fs:write-all",
-    "sharetarget:default"
+    "sharetarget:default",
+    "clipboard-manager:allow-read-text"
   ]
 }

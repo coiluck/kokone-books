@@ -17,4 +17,43 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.addEventListener('click', () => {
     closeEditMenu();
   });
+
+  listenForShareEvents(async (intent: ShareEvent) => {
+    const sharedData = intent.uri; // 共有されたテキスト（URL）
+    if (sharedData) {
+      changeModal('add', null, 300, true);
+      let sharedText: string | null = null;
+      const match = intent.uri.match(/S\.android\.intent\.extra\.TEXT=([^;]+)/);
+      if (match && match[1]) {
+        // URLデコード
+        sharedText = decodeURIComponent(match[1]);
+        setTimeout(() => {
+          const addBookTitle = document.getElementById('add-book-title') as HTMLInputElement;
+          if (!addBookTitle) return;
+          addBookTitle.value = sharedText || '';
+        }, 300);
+      }
+    }
+  });
+});
+
+import { listenForShareEvents, type ShareEvent } from "tauri-plugin-sharetarget-api";
+import { changeModal } from "./modules/changeModal";
+
+listenForShareEvents(async (intent: ShareEvent) => {
+  const sharedData = intent.uri; // 共有されたテキスト（URL）
+  if (sharedData) {
+    changeModal('add', null, 300, true);
+    let sharedText: string | null = null;
+    const match = intent.uri.match(/S\.android\.intent\.extra\.TEXT=([^;]+)/);
+    if (match && match[1]) {
+      // URLデコード
+      sharedText = decodeURIComponent(match[1]);
+      setTimeout(() => {
+        const addBookTitle = document.getElementById('add-book-title') as HTMLInputElement;
+        if (!addBookTitle) return;
+        addBookTitle.value = sharedText || '';
+      }, 300);
+    }
+  }
 });

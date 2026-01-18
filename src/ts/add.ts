@@ -4,6 +4,7 @@ import { addBook, BookItem, checkUrlExists } from "./modules/db";
 import { settingsState } from "./modules/store";
 import { getWebData } from "./modules/webData"
 import { showMessage } from "./modules/message";
+import { readText } from '@tauri-apps/plugin-clipboard-manager';
 
 export function setUpAdd() {
   setUpInputTags();
@@ -12,7 +13,7 @@ export function setUpAdd() {
   const addBookTitle = document.getElementById('add-book-title') as HTMLInputElement;
   addBookTitle.addEventListener('focus', async () => {
     // 自動入力
-    const userCopyText = await navigator.clipboard.readText();
+    const userCopyText = await readText();
     if (settingsState.autoInput === 'Focus' && addBookTitle.value.trim() === '') {
       if (settingsState.autoInputOnlyUrl) {
         // copy

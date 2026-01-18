@@ -249,6 +249,10 @@ select.setting-select option {
 .setting-item input[type="text"]#setting-preset-tags:focus {
   border: 1px solid var(--accent);
 }
+.setting-item input[type="text"]#setting-preset-tags::placeholder {
+  color: var(--text);
+  opacity: 0.5;
+}
 
 /* preset tags */
 .setting-tags-container {
