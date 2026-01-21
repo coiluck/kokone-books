@@ -5,6 +5,7 @@ import { settingsState } from "./modules/store";
 import { getWebData } from "./modules/webData"
 import { showMessage } from "./modules/message";
 import { readText } from '@tauri-apps/plugin-clipboard-manager';
+import { executeSearch } from "./library";
 
 export function setUpAdd() {
   setUpInputTags();
@@ -84,8 +85,10 @@ export function setUpAdd() {
         created_at: new Date().toISOString()
       };
     }
-    addBook(bookDetails as BookItem);
+    await addBook(bookDetails as BookItem);
+    showMessage('本を追加しました');
     resetAddBookTab();
+    executeSearch();
   });
 }
 
