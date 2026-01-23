@@ -57,9 +57,13 @@ export function setUpAdd() {
   });
   const addBookSubmit = document.getElementById('add-book-submit') as HTMLButtonElement;
   addBookSubmit.addEventListener('click', async () => {
+    const inputTitleValue = (document.getElementById('add-book-title') as HTMLInputElement).value.trim();
+    if (inputTitleValue === '') {
+      showMessage('書籍名を入力してください');
+      return;
+    }
     const id = uuid();
     const tagsArray = getTags();
-    const inputTitleValue = (document.getElementById('add-book-title') as HTMLInputElement).value.trim();
     const isWeb = URL.canParse(inputTitleValue);
     let bookDetails: BookItem;
     if (!isWeb) {
