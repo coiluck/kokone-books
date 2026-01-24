@@ -28,14 +28,14 @@ async function setUpSearch() {
         <span class="search-label">抽出タグ</span>
         <div class="search-tags-input-container" id="library-search-positive-tags-container">
           <!-- atode -->
-          <input type="text" id="library-search-positive-tags" placeholder="抽出タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
+          <input type="text" id="library-search-positive-tags" placeholder="抽出タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" enterkeyhint="search" />
         </div>
       </div>
       <div class="search-item">
         <span class="search-label">除外タグ</span>
         <div class="search-tags-input-container" id="library-search-negative-tags-container">
           <!-- atode -->
-          <input type="text" id="library-search-negative-tags" placeholder="除外タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" />
+          <input type="text" id="library-search-negative-tags" placeholder="除外タグを入力 & Enterキーで追加" spellcheck="false" autocomplete="off" enterkeyhint="search" />
         </div>
       </div>
       <div class="search-sort-item">
