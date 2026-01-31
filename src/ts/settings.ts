@@ -257,8 +257,11 @@ function setUpOtherSettings() {
   // import
   const importDatabaseButton = document.getElementById('setting-import-database') as HTMLButtonElement;
   if (importDatabaseButton) {
-    importDatabaseButton.addEventListener('click', () => {
-      importDatabase();
+    importDatabaseButton.addEventListener('click', async () => {
+      const importedCount = await importDatabase();
+      if (importedCount > 0) {
+        setUpLibrary();
+      }
     });
   }
 }
